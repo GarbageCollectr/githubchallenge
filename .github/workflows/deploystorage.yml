@@ -2,6 +2,7 @@ on:
   pull_request:
     branches:
       - test
+
 name: Azure ARM
 jobs:
   build-and-deploy:
