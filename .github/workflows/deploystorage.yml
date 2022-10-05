@@ -2,6 +2,7 @@ on:
   pull_request:
     branches:
       - test
+  workflow_dispatch:
 
 name: Azure ARM
 jobs:
