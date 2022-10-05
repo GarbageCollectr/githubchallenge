@@ -4,21 +4,21 @@
     "parameters": {
         "storageAccountName":{
             "type" : "string",
-            "defaultValue": "stgGHTest",
+            "defaultValue": "stgghtestalex",
             "metadata": {
                 "description": "description"
             }
         },
         "serverFarmName": {
             "type": "string",
-            "defaultValue" : "planGHTest",
+            "defaultValue" : "planghtest",
             "metadata": {
                 "description": "description"
             }
         },
         "functionName": {
             "type": "string",
-            "defaultValue": "githubchallengetest",
+            "defaultValue": "awghchaltest",
             "metadata": {
                 "description": "description"
             }
