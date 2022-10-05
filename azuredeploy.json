@@ -1,67 +1,636 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "metadata": {
-    "_generator": {
-      "name": "bicep",
-      "version": "0.6.18.56646",
-      "templateHash": "4523590120167697900"
-    }
-  },
-  "parameters": {
-    "storageAccountType": {
-      "type": "string",
-      "defaultValue": "Standard_LRS",
-      "allowedValues": [
-        "Premium_LRS",
-        "Premium_ZRS",
-        "Standard_GRS",
-        "Standard_GZRS",
-        "Standard_LRS",
-        "Standard_RAGRS",
-        "Standard_RAGZRS",
-        "Standard_ZRS"
-      ],
-      "metadata": {
-        "description": "Storage Account type"
-      }
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_githubchallenge_name": {
+            "defaultValue": "githubchallenge",
+            "type": "String"
+        },
+        "serverfarms_ASP_AzureChallengeGitHubActionsRG_8777_externalid": {
+            "defaultValue": "/subscriptions/d20707ed-a238-4e84-b858-f381e102a536/resourceGroups/AzureChallengeGitHubActionsRG/providers/Microsoft.Web/serverfarms/ASP-AzureChallengeGitHubActionsRG-8777",
+            "type": "String"
+        }
     },
-    "location": {
-      "type": "string",
-      "defaultValue": "[resourceGroup().location]",
-      "metadata": {
-        "description": "Location for the storage account."
-      }
-    },
-    "storageAccountName": {
-      "type": "string",
-      "defaultValue": "[format('store{0}', uniqueString(resourceGroup().id))]",
-      "metadata": {
-        "description": "The name of the Storage Account"
-      }
-    }
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2021-06-01",
-      "name": "[parameters('storageAccountName')]",
-      "location": "[parameters('location')]",
-      "sku": {
-        "name": "[parameters('storageAccountType')]"
-      },
-      "kind": "StorageV2",
-      "properties": {}
-    }
-  ],
-  "outputs": {
-    "storageAccountName": {
-      "type": "string",
-      "value": "[parameters('storageAccountName')]"
-    },
-    "storageAccountId": {
-      "type": "string",
-      "value": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
-    }
-  }
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('sites_githubchallenge_name')]",
+            "location": "Central US",
+            "tags": {
+                "hidden-link: /app-insights-resource-id": "/subscriptions/d20707ed-a238-4e84-b858-f381e102a536/resourceGroups/AzureChallengeGitHubActionsRG/providers/microsoft.insights/components/githubchallenge2022100572",
+                "hidden-link: /app-insights-instrumentation-key": "a1c41771-52ee-4a75-92c9-396caf9d9995",
+                "hidden-link: /app-insights-conn-string": "InstrumentationKey=a1c41771-52ee-4a75-92c9-396caf9d9995;IngestionEndpoint=https://centralus-2.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/"
+            },
+            "kind": "functionapp",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_githubchallenge_name'), '.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "[concat(parameters('sites_githubchallenge_name'), '.scm.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[parameters('serverfarms_ASP_AzureChallengeGitHubActionsRG_8777_externalid')]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "customDomainVerificationId": "90FC1B59764FB56D9B2C3B71E0631BC4A408C8562A35A36380DD7D33C5A8A01C",
+                "containerSize": 1536,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/ftp')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "tags": {
+                "hidden-link: /app-insights-resource-id": "/subscriptions/d20707ed-a238-4e84-b858-f381e102a536/resourceGroups/AzureChallengeGitHubActionsRG/providers/microsoft.insights/components/githubchallenge2022100572",
+                "hidden-link: /app-insights-instrumentation-key": "a1c41771-52ee-4a75-92c9-396caf9d9995",
+                "hidden-link: /app-insights-conn-string": "InstrumentationKey=a1c41771-52ee-4a75-92c9-396caf9d9995;IngestionEndpoint=https://centralus-2.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/"
+            },
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/scm')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "tags": {
+                "hidden-link: /app-insights-resource-id": "/subscriptions/d20707ed-a238-4e84-b858-f381e102a536/resourceGroups/AzureChallengeGitHubActionsRG/providers/microsoft.insights/components/githubchallenge2022100572",
+                "hidden-link: /app-insights-instrumentation-key": "a1c41771-52ee-4a75-92c9-396caf9d9995",
+                "hidden-link: /app-insights-conn-string": "InstrumentationKey=a1c41771-52ee-4a75-92c9-396caf9d9995;IngestionEndpoint=https://centralus-2.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/"
+            },
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/web')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "tags": {
+                "hidden-link: /app-insights-resource-id": "/subscriptions/d20707ed-a238-4e84-b858-f381e102a536/resourceGroups/AzureChallengeGitHubActionsRG/providers/microsoft.insights/components/githubchallenge2022100572",
+                "hidden-link: /app-insights-instrumentation-key": "a1c41771-52ee-4a75-92c9-396caf9d9995",
+                "hidden-link: /app-insights-conn-string": "InstrumentationKey=a1c41771-52ee-4a75-92c9-396caf9d9995;IngestionEndpoint=https://centralus-2.in.applicationinsights.azure.com/;LiveEndpoint=https://centralus.livediagnostics.monitor.azure.com/"
+            },
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$githubchallenge",
+                "scmType": "GitHubAction",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "cors": {
+                    "allowedOrigins": [
+                        "https://portal.azure.com"
+                    ],
+                    "supportCredentials": false
+                },
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "functionAppScaleLimit": 200,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/43c1a8457be14080b97df1c4e0b78bb9')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"b2352a82802793ef82d4738aa624c6424046565b\",\"repoName\":\"GarbageCollectr/githubchallenge\",\"slotName\":\"production\"}",
+                "start_time": "2022-10-05T15:16:57.0136863Z",
+                "end_time": "2022-10-05T15:17:06.593084Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/8a3b727240a84a9f99210525bc877493')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"8d09cb2f8b5648b3c715e963643b1170daf4740c\",\"repoName\":\"GarbageCollectr/githubchallenge\",\"slotName\":\"production\"}",
+                "start_time": "2022-10-05T15:14:04.3612123Z",
+                "end_time": "2022-10-05T15:14:13.9349246Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/a1f4683f73c14ab486ab3b0169f75beb')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"22c6a2d7b151b6cb3b399ed8ac8dc065ab1f674f\",\"repoName\":\"GarbageCollectr/githubchallenge\",\"slotName\":\"production\"}",
+                "start_time": "2022-10-05T16:11:56.0036391Z",
+                "end_time": "2022-10-05T16:12:05.6042317Z",
+                "active": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/a73827ea505f4cdfb837db7bdade547a')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"70ffb6078b43384696e815a789cad7a7af406781\",\"repoName\":\"GarbageCollectr/githubchallenge\",\"slotName\":\"production\"}",
+                "start_time": "2022-10-05T15:01:24.2514781Z",
+                "end_time": "2022-10-05T15:01:41.2119606Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/a90aa994d4bd427483ab35e3550cbf80')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"1e34dac5f7ab164fc78afd182442d1d6d295faeb\",\"repoName\":\"GarbageCollectr/githubchallenge\",\"slotName\":\"production\"}",
+                "start_time": "2022-10-05T15:53:39.1837736Z",
+                "end_time": "2022-10-05T15:53:47.3869961Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/a9c44a15cc344093bbe33d77f799f43a')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"9a723be5c61d8a5a65d973d5ae4052bb1112c605\",\"repoName\":\"GarbageCollectr/githubchallenge\",\"slotName\":\"production\"}",
+                "start_time": "2022-10-05T14:59:30.0440112Z",
+                "end_time": "2022-10-05T14:59:39.9354205Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/abb53f04d5e0451e93a54ba9283105d3')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"82c1f6744ac35454f8b2d23df4c8541b0ef448ca\",\"repoName\":\"GarbageCollectr/githubchallenge\",\"slotName\":\"production\"}",
+                "start_time": "2022-10-05T15:23:36.9982108Z",
+                "end_time": "2022-10-05T15:23:46.6484099Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/cf7d2ae6d4d74e3e8047ab9420df9249')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"c86b4982bb57c2e3b160e56e34503e50711d3415\",\"repoName\":\"GarbageCollectr/githubchallenge\",\"slotName\":\"production\"}",
+                "start_time": "2022-10-05T15:11:14.3239299Z",
+                "end_time": "2022-10-05T15:11:24.4396469Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/ef1ee9caf30d440dbe77edb0fbbf8d55')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"daaba22dfa71c04736fa101de3b24ace02406408\",\"repoName\":\"GarbageCollectr/githubchallenge\",\"slotName\":\"production\"}",
+                "start_time": "2022-10-05T16:10:42.0362001Z",
+                "end_time": "2022-10-05T16:10:50.4751763Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/f2c72b67bc1b48e59e3dd67b5e641738')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "GITHUB_ZIP_DEPLOY",
+                "message": "{\"type\":\"deployment\",\"sha\":\"c86b4982bb57c2e3b160e56e34503e50711d3415\",\"repoName\":\"GarbageCollectr/githubchallenge\",\"slotName\":\"production\"}",
+                "start_time": "2022-10-05T14:53:35.5446301Z",
+                "end_time": "2022-10-05T14:53:44.9411322Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/functions",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/Function1')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "script_root_path_href": "https://githubchallenge.azurewebsites.net/admin/vfs/site/wwwroot/Function1/",
+                "script_href": "https://githubchallenge.azurewebsites.net/admin/vfs/site/wwwroot/bin/GitHubActionsChallengeFunctionApp.dll",
+                "config_href": "https://githubchallenge.azurewebsites.net/admin/vfs/site/wwwroot/Function1/function.json",
+                "test_data_href": "https://githubchallenge.azurewebsites.net/admin/vfs/data/Functions/sampledata/Function1.dat",
+                "href": "https://githubchallenge.azurewebsites.net/admin/functions/Function1",
+                "config": {},
+                "invoke_url_template": "https://githubchallenge.azurewebsites.net/api/function1",
+                "language": "DotNetAssembly",
+                "isDisabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/functions",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/Function2')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "script_root_path_href": "https://githubchallenge.azurewebsites.net/admin/vfs/site/wwwroot/Function2/",
+                "script_href": "https://githubchallenge.azurewebsites.net/admin/vfs/site/wwwroot/bin/GitHubActionsChallengeFunctionApp.dll",
+                "config_href": "https://githubchallenge.azurewebsites.net/admin/vfs/site/wwwroot/Function2/function.json",
+                "test_data_href": "https://githubchallenge.azurewebsites.net/admin/vfs/data/Functions/sampledata/Function2.dat",
+                "href": "https://githubchallenge.azurewebsites.net/admin/functions/Function2",
+                "config": {},
+                "invoke_url_template": "https://githubchallenge.azurewebsites.net/api/function2",
+                "language": "DotNetAssembly",
+                "isDisabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/functions",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/Function3')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "script_root_path_href": "https://githubchallenge.azurewebsites.net/admin/vfs/site/wwwroot/Function3/",
+                "script_href": "https://githubchallenge.azurewebsites.net/admin/vfs/site/wwwroot/bin/GitHubActionsChallengeFunctionApp.dll",
+                "config_href": "https://githubchallenge.azurewebsites.net/admin/vfs/site/wwwroot/Function3/function.json",
+                "test_data_href": "https://githubchallenge.azurewebsites.net/admin/vfs/data/Functions/sampledata/Function3.dat",
+                "href": "https://githubchallenge.azurewebsites.net/admin/functions/Function3",
+                "config": {},
+                "invoke_url_template": "https://githubchallenge.azurewebsites.net/api/function3",
+                "language": "DotNetAssembly",
+                "isDisabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/', parameters('sites_githubchallenge_name'), '.azurewebsites.net')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "siteName": "githubchallenge",
+                "hostNameType": "Verified"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/preprod')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "kind": "functionapp",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "githubchallenge-preprod.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "githubchallenge-preprod.scm.azurewebsites.net",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[parameters('serverfarms_ASP_AzureChallengeGitHubActionsRG_8777_externalid')]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 200,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "customDomainVerificationId": "90FC1B59764FB56D9B2C3B71E0631BC4A408C8562A35A36380DD7D33C5A8A01C",
+                "containerSize": 1536,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": false,
+                "redundancyMode": "None",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/preprod/ftp')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('sites_githubchallenge_name'), 'preprod')]",
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/basicPublishingCredentialsPolicies",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/preprod/scm')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('sites_githubchallenge_name'), 'preprod')]",
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/config",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/preprod/web')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('sites_githubchallenge_name'), 'preprod')]",
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "remoteDebuggingVersion": "VS2019",
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$githubchallenge__preprod",
+                "scmType": "GitHubAction",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "cors": {
+                    "allowedOrigins": [
+                        "https://portal.azure.com"
+                    ],
+                    "supportCredentials": false
+                },
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "functionAppScaleLimit": 200,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/slots/hostNameBindings",
+            "apiVersion": "2022-03-01",
+            "name": "[concat(parameters('sites_githubchallenge_name'), '/preprod/', parameters('sites_githubchallenge_name'), '-preprod.azurewebsites.net')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('sites_githubchallenge_name'), 'preprod')]",
+                "[resourceId('Microsoft.Web/sites', parameters('sites_githubchallenge_name'))]"
+            ],
+            "properties": {
+                "siteName": "githubchallenge(preprod)",
+                "hostNameType": "Verified"
+            }
+        }
+    ]
 }
