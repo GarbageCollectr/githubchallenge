@@ -1,0 +1,24 @@
+on:
+  pull_request:
+    branches:
+      - test
+  workflow_dispatch:
+
+name: Azure ARM
+jobs:
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@test
+    - uses: azure/login@v1
+    
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        allow-no-subscriptions: true
+        
+    - uses: azure/arm-deploy@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        resourceGroupName: ${{ secrets.AZURE_RG }}
+        template: ./azuredeploy.json
