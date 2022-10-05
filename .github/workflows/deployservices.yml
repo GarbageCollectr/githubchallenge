@@ -10,9 +10,8 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@test
+    - uses: actions/checkout@main
     - uses: azure/login@v1
-    
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         allow-no-subscriptions: true
@@ -22,3 +21,4 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         resourceGroupName: ${{ secrets.AZURE_RG }}
         template: ./azuredeploy.json
+
